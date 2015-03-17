@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Material Design CSS Label</title>
+	<meta name="description" content="Demo of how to create form label according to material design only with CSS">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/favicon.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+</head>
+<body>
+
+<style type="text/css">
+.field {
+	position: relative;
+}
+.field input {
+	display: block;
+	width: 100%;
+	padding: 5px;
+	outline: none;
+	color: #727272;
+	font-size: 20px;
+	font-weight: 100;
+	border:0;
+	border-bottom: 1px solid #424242;
+	background: transparent;
+}
+.field input:focus {
+	border-bottom: 1px solid #00B8D4;
+}
+.field label {
+	display: block;
+	padding: 5px;
+	padding-left: 7px;
+	color: #424242;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all 0.6s;
+}
+.field input:focus + label, input:hover + label {
+	color:  #00B8D4;
+}
+.field label {
+	position: absolute;
+	top: 0;
+}
+.field input.normal:focus + label {
+	top: -18px;
+	width: 100%;
+	font-size: 12px;
+}
+.field input.valid:valid + label {
+	top: -18px;
+	width: 100%;
+	font-size: 12px;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background: #212121;
+  font-family: 'Roboto', sans-serif;
+}
+h1, h2 {
+	color: #525252;
+	margin-top: 2em;
+}
+.content {
+	width: 80%;
+	margin-top: 2em;
+	margin-left: auto;
+	margin-right: auto;
+}
+a{
+	color:  #00B8D4;
+}
+</style>
+
+<div class="content">
+	<h1>Material Design CSS Label</h1>
+	<p>
+		<a href="https://lab.moin.im/2015/03/17/material-design-labels-css/">Back to post</a>
+	</p>
+
+
+	<h2>on :focus</h2>
+	<div class="field">
+		<input type="text" class="normal" id="name" />
+		<label for="name">Your Name</label>
+	</div>
+
+	<h2>on :valid with required attribute</h2>
+	<div class="field">
+		<input type="text" id="name2" class="valid" required/>
+		<label for="name2">Your Name</label>
+	</div>
+</div>
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+</body>
+</html>
