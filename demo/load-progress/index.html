@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Moin's Lab : Loading bar</title>
+	<meta name="description" content="Demo of page load indicator like YouTube. by Moin Uddin">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/favicon.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="stylesheet" type="text/css" href="/public/css/demo.css">
+</head>
+<body>
+
+<script type="text/javascript">
+	var loadingBar = {
+		el: null,
+		init: function() {
+			loadingBar.el = document.createElement( 'div' );
+			loadingBar.el.id = 'loadingbar';
+			loadingBar.el.style.cssText = 'position:fixed;top:0;left:0;display:block;height:1px;width:60%;background:#18FFFF;transition:1s width;-webkit-transition:1s width;-moz-transition:1s width;-ms-transition:1s width;z-index:99999';
+			document.body.appendChild( loadingBar.el );
+		},
+		setProgress: function( p ) {
+			if( p >= 0 && p <= 100 ) {
+				loadingBar.el.style.width = p + '%';
+				loadingBar.onChange(p);
+			}
+		},
+		prog: function( p ) {
+			loadingBar.setProgress( p )
+		},
+		inc: function( ) {
+			var pNow = loadingBar.el.style.width.slice(0,-1);
+			loadingBar.setProgress( ++pNow );
+		},
+		dec: function( ) {
+			var pNow = loadingBar.el.style.width.slice(0,-1);
+			loadingBar.setProgress( --pNow );
+		},
+		color: function( clr ) {
+			loadingBar.el.style.background = '#' + clr;
+		},
+		height: function( h ) {
+			loadingBar.el.style.height = h + 'px';
+		},
+		onChange: function ( val ) {}
+	}
+
+	loadingBar.init();
+	
+	var range = null,
+	inc = null,
+	dec = null,
+	value = null;
+	document.addEventListener('DOMContentLoaded', function() {
+		range = document.getElementById('range');
+		inc = document.getElementById('inc');
+		dec = document.getElementById('dec');
+		value = document.getElementById('value');
+
+		loadingBar.onChange = function(v) {
+			range.value = v;
+			value.value = v;
+		};
+
+		range.addEventListener('change', function() {
+			loadingBar.prog( this.value );
+		});
+		value.addEventListener('keyup', function() {
+			loadingBar.prog( this.value );
+		});
+		value.addEventListener('change', function() {
+			loadingBar.prog( this.value );
+		});
+
+		inc.addEventListener('click', function() {
+			loadingBar.inc();
+		});
+
+		dec.addEventListener('click', function() {
+			loadingBar.dec();
+		});
+
+	});
+</script>
+
+<div class="content">
+
+	<div class="nav">
+		<a href="./scroll.html">Demo 2: Page Scroll Progress</a>
+		<a href="/2015/04/22/progress-bar-javascript/">Back to post</a>
+	</div>
+
+	<h2>Load Progress with controls</h2>
+
+	<p>Use the controls below to move the progress bar on top of page.</p>
+
+	<input type="range" value="60" min="0" max="100" id="range"/>
+	<input type="number" min="0" max="100" value="60" id="value">
+
+	<button id="inc">Increase by 1</button>
+	<button id="dec">Decrease by 1</button>
+</div>
+
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+</body>
+</html>

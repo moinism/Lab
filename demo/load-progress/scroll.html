@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Moin's Lab : Loading bar for scroll progress</title>
+	<meta name="description" content="Demo of page load indicator like YouTube showing page scroll progress. by Moin Uddin">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/favicon.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="stylesheet" type="text/css" href="/public/css/demo.css">
+</head>
+<body style="height:2000px;">
+<script type="text/javascript">
+	var loadingBar = {
+		el: null,
+		init: function() {
+			loadingBar.el = document.createElement( 'div' );
+			loadingBar.el.id = 'loadingbar';
+			loadingBar.el.style.cssText = 'position:fixed;top:0;left:0;display:block;height:1px;width:60%;background:#18FFFF;transition:1s width;-webkit-transition:1s width;-moz-transition:1s width;-ms-transition:1s width;z-index:99999';
+			document.body.appendChild( loadingBar.el );
+		},
+		setProgress: function( p ) {
+			if( p >= 0 && p <= 100 ) {
+				loadingBar.el.style.width = p + '%';
+				loadingBar.onChange(p);
+			}
+		},
+		prog: function( p ) {
+			loadingBar.setProgress( p )
+		},
+		inc: function( ) {
+			var pNow = loadingBar.el.style.width.slice(0,-1);
+			loadingBar.setProgress( ++pNow );
+		},
+		dec: function( ) {
+			var pNow = loadingBar.el.style.width.slice(0,-1);
+			loadingBar.setProgress( --pNow );
+		},
+		color: function( clr ) {
+			loadingBar.el.style.background = '#' + clr;
+		},
+		height: function( h ) {
+			loadingBar.el.style.height = h + 'px';
+		},
+		onChange: function ( val ) {}
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+		loadingBar.init();
+		loadingBar.prog( 0 );
+	});
+
+function updateProgress( progress ) {
+	loadingBar.prog( progress );
+    console.log( 'You have scrolled:', progress, '%' );
+}
+
+function endOfPage( time ) {
+    // in miliseconds
+    console.log( 'The time you took to reach end:', time/1000, 'Seconds' );
+}
+
+function scrollProgress (el, updateFunc, endFunc) {
+	document.addEventListener('DOMContentLoaded', function() {
+		var progress = 0,
+		end = false,
+		timeStart = null,
+		timeEnd = null,
+		height = 0,
+		elt = null;
+
+		if( el == window ) {
+			el = document.body;
+			elt = window;
+			height = window.innerHeight;
+		} else {
+			el = document.getElementById(el);
+			elt = el;
+			height = el.clientHeight;
+		}
+
+	    elt.addEventListener('scroll', function() {
+	        if(timeStart == null)
+	            timeStart = Date.now();
+
+	        progress = (el.scrollTop / ( el.scrollHeight - height ) ) * 100;
+
+	        updateFunc( progress );
+
+	        if(progress >= 100 && !end) {
+	            timeEnd = Date.now();
+	            end = true;
+	            endFunc( timeEnd - timeStart );
+	        }
+	    });
+	});
+}
+scrollProgress(window, updateProgress, endOfPage);
+
+</script>
+
+<div class="content">
+
+	<div class="nav">
+		<a href="./">Demo 1: Progress bar</a>
+		<a href="/2015/04/22/progress-bar-javascript/">Back to post</a>
+	</div>
+
+	<h2>Showing Scroll Progress</h2>
+
+	<p>This demo uses <a href="/2015/03/18/page-scroll-progress/">page scroll progress</a> with <a href="/2015/04/22/progress-bar-javascript/">loading bar</a>. Scroll this page to see progress on top.</p>
+
+</div>
+
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+</body>
+</html>

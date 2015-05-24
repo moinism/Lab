@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Page scroll progress with JavaScript &middot; Lab
+    
+  </title>
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/favicon.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          Lab
+        </a>
+      </h1>
+      <p class="lead">Follow experiments on HTML5 and inpirations of different stuff By <a href="https://twitter.com/moinism" target="_blank">@moinism</a></p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">About</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+      <a class="sidebar-nav-item" target="_blank" href="http://feeds.feedburner.com/moinlab">Subscribe</a>
+      <a class="sidebar-nav-item" href="https://github.com/moinism/Lab">on GitHub</a>
+
+    </nav>
+
+    <p>&copy; 2015. All rights reserved.</p>
+  </div>
+</div>
+
+<style type="text/css">
+.btn {
+  background-color:#6a9fb5;
+  -moz-border-radius:28px;
+  -webkit-border-radius:28px;
+  border-radius:28px;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff !important;
+  font-family:Arial;
+  font-size:17px;
+  padding:16px 31px;
+  text-decoration:none;
+  /*text-shadow:0px 1px 0px #2f6627;*/
+}
+</style>
+<link rel="stylesheet" href="/public/css/poole.css">
+<link rel="stylesheet" href="/public/css/syntax.css">
+<link rel="stylesheet" href="/public/css/hyde.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Page scroll progress with JavaScript</h1>
+  <time datetime="2015-03-18 00:00:00 +0500" class="post-date">18 Mar 2015</time>
+  <p>I recently saw a blog had used the scroll progress of page in percentage on every post. I liked the idea so thought why not try it and create a JavaScript snippet. So here we are.</p>
+
+<p><em>Note:</em> I&#39;m not using jQuery. Its plain JavaScript. But it can also be done with jQuery. Of course, the code below can be used with jQuery too.</p>
+
+<p><a href="/demo/scroll-progress/" class="btn">Demo</a></p>
+
+<h2>Listen to scroll event</h2>
+
+<p>We&#39;ll add an <code>addEventListener</code> to <code>window</code> object. What are your thoughts on using <code>document</code> here instead? </p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{});</span>
+<span class="c1">// in jQuery:</span>
+<span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){});</span></code></pre></div>
+
+<p>But I suggest you attach this event after DOM has been loaded like so:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{});</span>
+<span class="p">});</span>
+<span class="c1">// in jQuery</span>
+<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){});</span>
+<span class="p">})();</span></code></pre></div>
+
+<h2>Calculate the progress</h2>
+
+<p>Here is the formula I spent a lot of time to make.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">progress</span> <span class="o">=</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">/</span> <span class="p">(</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollHeight</span> <span class="o">-</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerHeight</span> <span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span></code></pre></div>
+
+<p>We&#39;ll do this calculation on every <code>scroll</code> event. Means we&#39;ll be doing it like:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">progress</span> <span class="o">=</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">/</span> <span class="p">(</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollHeight</span> <span class="o">-</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerHeight</span> <span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span>
+
+        <span class="c1">// console.log(progress);</span>
+    <span class="p">});</span>
+<span class="p">});</span></code></pre></div>
+
+<h2>Do something with progress</h2>
+
+<p>I&#39;ll just define another function to be called whenever progress is updated.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">fucntion</span> <span class="nx">updateProgress</span><span class="p">(</span> <span class="nx">progress</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Do whatever you like</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">progress</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">progress</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">progress</span> <span class="o">=</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">/</span> <span class="p">(</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollHeight</span> <span class="o">-</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerHeight</span> <span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span>
+
+        <span class="nx">updateProgress</span><span class="p">(</span> <span class="nx">progress</span> <span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span></code></pre></div>
+
+<p>And we are done. Now you can use that progress in percentage to do whatever you want.</p>
+
+<h2>Extra bit</h2>
+
+<p>I also wanted to track the time it took for full page scroll. So I added the following code. </p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">updateProgress</span><span class="p">(</span> <span class="nx">progress</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Do whatever you like</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;You have scrolled:&#39;</span><span class="p">,</span> <span class="nx">progress</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">endOfPage</span><span class="p">(</span> <span class="nx">time</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// in miliseconds</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;The time you took to reach end:&#39;</span><span class="p">,</span> <span class="nx">time</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;Seconds&#39;</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">progress</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="nx">end</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+<span class="nx">timeStart</span> <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
+<span class="nx">timeEnd</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">timeStart</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span>
+            <span class="nx">timeStart</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+
+        <span class="nx">progress</span> <span class="o">=</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">/</span> <span class="p">(</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollHeight</span> <span class="o">-</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerHeight</span> <span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span>
+
+        <span class="nx">updateProgress</span><span class="p">(</span> <span class="nx">progress</span> <span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nx">progress</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">end</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">timeEnd</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+            <span class="nx">end</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">endOfPage</span><span class="p">(</span> <span class="nx">timeEnd</span> <span class="o">-</span> <span class="nx">timeStart</span> <span class="p">);</span> <span class="c1">// Call the other function</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">});</span></code></pre></div>
+
+<h2>Gist</h2>
+
+<p>I&#39;ve also created a gist for this purpose.</p>
+
+<script src="https://gist.github.com/a4d4fa5d47f205efaf56.js"> </script>
+
+<h3>How to use:</h3>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">scrollProgress</span> <span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">updateFunc</span><span class="p">,</span> <span class="nx">endFunc</span><span class="p">);</span></code></pre></div>
+
+<p><code>el</code>: It accepts <code>window</code> or <code>id</code> of an element.</p>
+
+<p><code>updateFunc</code>: Function to be called on every update of scroll. Progress percentage will be passed as parameter.</p>
+
+<p><code>endFunc</code>: Function to be called when scroll has reached the end for the first time. Total time taken in milliseconds will be passed.</p>
+
+<h4>Example:</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">scrollProgress</span> <span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="nx">updateFunc</span><span class="p">,</span> <span class="nx">endFunc</span><span class="p">);</span>
+<span class="c1">// or</span>
+<span class="nx">scrollProgress</span> <span class="p">(</span><span class="s1">&#39;idOfDiv&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span> <span class="o">+</span> <span class="s1">&#39;% Scrolled&#39;</span><span class="p">);</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;End reached in&#39;</span><span class="p">,</span> <span class="nx">time</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;Seconds&#39;</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+
+
+  <h2>Thoughts or Suggestions:</h2>
+  <div id="disqus_thread"></div>
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2015/04/22/progress-bar-javascript/">
+            Create a YouTube-like page load progress plugin in 30 lines of JavaScript
+            <small>22 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/04/21/detect-page-load-javascript/">
+            How to detect when page has loaded with JavaScript
+            <small>21 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/03/17/material-design-labels-css/">
+            Creating material design labels with CSS
+            <small>17 Mar 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+<script type="text/javascript">
+    var disqus_shortname = 'moinslab';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+    </div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-46702057-9', 'auto');
+  ga('send', 'pageview');
+</script>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Moin's Lab : Page Scroll Progress with JavaScript</title>
+	<meta name="description" content="Demo of page scroll progress with JavaScript. by Moin Uddin">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/favicon.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+    <link rel="stylesheet" type="text/css" href="/public/css/demo.css">
+
+  <style type="text/css">
+body {
+  padding: 0;
+  margin: 0;
+  background: #212121;
+  font-family: 'Roboto', sans-serif;
+  height: 2000px;
+}
+h1, h2 {
+	color: #525252;
+	margin-top: 2em;
+}
+.content {
+	width: 80%;
+	margin-top: 2em;
+	margin-left: auto;
+	margin-right: auto;
+}
+a{
+	color:  #00B8D4;
+}
+#progress {
+	position: fixed;
+	display: block;
+	width: 0%;
+	bottom: 0;
+	left: 0;
+	height: 50%;
+	text-align: center;
+	background: #00B8D4;
+}
+
+</style>
+<script type="text/javascript">
+var prog = null,
+perc = null;
+document.addEventListener('DOMContentLoaded', function() {
+	prog = document.getElementById('progress');
+	perc = document.getElementById('perc');
+});
+function updateProgress( progress ) {
+	prog.style.width = progress+'%';
+	perc.innerHTML = Math.round(progress);
+    console.log( 'You have scrolled:', progress, '%' );
+}
+
+function endOfPage( time ) {
+    // in miliseconds
+    console.log( 'The time you took to reach end:', time/1000, 'Seconds' );
+}
+
+function scrollProgress (el, updateFunc, endFunc) {
+	document.addEventListener('DOMContentLoaded', function() {
+		var progress = 0,
+		end = false,
+		timeStart = null,
+		timeEnd = null,
+		height = 0,
+		elt = null;
+
+		if( el == window ) {
+			el = document.body;
+			elt = window;
+			height = window.innerHeight;
+		} else {
+			el = document.getElementById(el);
+			elt = el;
+			height = el.clientHeight;
+		}
+
+	    elt.addEventListener('scroll', function() {
+	        if(timeStart == null)
+	            timeStart = Date.now();
+
+	        progress = (el.scrollTop / ( el.scrollHeight - height ) ) * 100;
+
+	        updateFunc( progress );
+
+	        if(progress >= 100 && !end) {
+	            timeEnd = Date.now();
+	            end = true;
+	            endFunc( timeEnd - timeStart );
+	        }
+	    });
+	});
+}
+scrollProgress(window, updateProgress, endOfPage);
+</script>
+</head>
+<body>
+
+<div class="content">
+
+	<div class="nav">
+		<a href="./bar.html">Demo 2: Page Scroll Progress with bar</a>
+		<a href="/2015/03/18/page-scroll-progress/">Back to post</a>
+	</div>
+
+	<h2>Page scroll progress</h2>
+
+</div>
+
+<div id="progress">
+	<span id="perc">0</span>%
+</div>
+
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+</body>
+</html>

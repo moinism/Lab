@@ -10,7 +10,7 @@
 
   <title>
     
-      Welcome to my lab &middot; Lab
+      How to detect when page has loaded with JavaScript &middot; Lab
     
   </title>
 
@@ -87,23 +87,31 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Welcome to my lab</h1>
-  <time datetime="2015-03-08 00:00:00 +0500" class="post-date">08 Mar 2015</time>
-  <p>Hey There!</p>
+  <h1 class="post-title">How to detect when page has loaded with JavaScript</h1>
+  <time datetime="2015-04-21 00:00:00 +0500" class="post-date">21 Apr 2015</time>
+  <p><code>Uncaught TypeError: Cannot read property &#39;innerHTML&#39; of null</code></p>
 
-<p>Thank you for paying me a visit. This is my experiment lab where I&#39;ll be sharing my ideas and work on web.</p>
+<p>Or a similar error is what we&#39;ll get when we try to access an element before its loaded.</p>
 
-<p>What I like to work on most is:</p>
+<p>To avoid this, we should only access HTML elements when DOM has completely loaded.</p>
+
+<h2>How to know when DOM has loaded</h2>
+
+<p>Well, there&#39;s an event called <code>DOMContentLoaded</code> that we can listen to.</p>
+
+<p>Like this:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;DOMContentLoaded&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;DOM Loaded, access elements without errors now&quot;</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+
+<p>Its handy piece of code that you&#39;ll see me using often. You can read <a href="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded" target="_blank">more about DOMContentLoaded</a></p>
+
+<p><em>References:</em></p>
 
 <ul>
-<li>HTML5</li>
-<li>JavaScript</li>
-<li>PHP</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model" target="_blank">DOM</a></li>
 </ul>
-
-<p>And that&#39;s what I&#39;ll be using to present my ideas. I&#39;ll be working on tutorials, guides and innovative usage of existing APIs/services.</p>
-
-<p>You can follow my <a href="https://twitter.com">on Twitter</a> for updates or <a href="http://feeds.feedburner.com/moinlab">subscribe to receive emails</a> about new content.</p>
 
 
   <h2>Thoughts or Suggestions:</h2>
@@ -125,18 +133,18 @@
     
       <li>
         <h3>
-          <a href="/2015/04/21/detect-page-load-javascript/">
-            How to detect when page has loaded with JavaScript
-            <small>21 Apr 2015</small>
+          <a href="/2015/03/18/page-scroll-progress/">
+            Page scroll progress with JavaScript
+            <small>18 Mar 2015</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/03/18/page-scroll-progress/">
-            Page scroll progress with JavaScript
-            <small>18 Mar 2015</small>
+          <a href="/2015/03/17/material-design-labels-css/">
+            Creating material design labels with CSS
+            <small>17 Mar 2015</small>
           </a>
         </h3>
       </li>
