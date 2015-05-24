@@ -4,7 +4,7 @@
  <title>Lab</title>
  <link href="https://lab.moin.im/atom.xml" rel="self"/>
  <link href="https://lab.moin.im/"/>
- <updated>2015-05-24T20:10:10+05:00</updated>
+ <updated>2015-05-24T23:40:19+05:00</updated>
  <id>https://lab.moin.im</id>
  <author>
    <name>Moin Uddin</name>
@@ -21,7 +21,7 @@
 
 &lt;p&gt;In this post, I&amp;#39;ll try to create a plugin to show a loading bar which could be used for anything.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;/demo/load-progress/&quot; class=&quot;btn&quot;&gt;Demo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;/demo/load-progress/&quot; class=&quot;btn&quot;&gt;Demo&lt;/a&gt; &lt;a href=&quot;https://github.com/moinism/LoadingBar&quot; class=&quot;btn&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2&gt;How it works&lt;/h2&gt;
 
